@@ -1,30 +1,51 @@
+import { useEffect, useState } from "react";
+import { InlineContainer } from "../../../component/App";
 import { Input } from "../../../component/Input";
-import { ProductCard } from "../../../component/ProductCard";
+import { ProductList as ProductListComponent } from "../../../component/ProductList";
 import { Spacing } from "../../../component/Spacing";
 import { MainTitle, Title } from "../../../component/Typograph";
+import { Product } from "../Edit";
 import { ListWrapper, ProductListWrapper } from "./styles";
 
 export const ProductList = () => {
-  const products = [];
+  const [products, setProducts] = useState<Product[]>([]);
 
-  for (let i = 1; i <= 30; i++) {
-    const product = {
-      name: `Produto ${i}`,
-      value: i * 10, // Valor de exemplo, você pode ajustar conforme necessário
-      description: `Descrição do Produto ${i}`,
-    };
-    products.push(product);
-  }
+  const handleSearch = (search: string) => {
+    if (!search)
+      return setProducts([
+        { name: "teste", description: "descrição", value: 2 },
+        { name: "search", description: "211", value: 3 },
+      ]);
+    return setProducts(
+      products.filter(
+        ({ name, description }) =>
+          name.includes(search) || description.includes(search)
+      )
+    );
+  };
+
+  useEffect(() => {
+    setProducts([
+      { name: "teste", description: "descrição", value: 2 },
+      { name: "search", description: "211", value: 3 },
+    ]);
+  }, []);
+
   return (
     <ListWrapper>
       <Spacing top={50} />
       <MainTitle>Produtos</MainTitle>
       <Spacing bottom={50} />
-      <Input placeholder="Digite para buscar" label="Buscar" />
-      <Spacing bottom={50} />
 
       <ProductListWrapper>
-        {products?.map((product, i) => <ProductCard {...product} key={i} />)}
+        <InlineContainer>
+          <Input
+            placeholder="Digite para buscar"
+            label="Buscar"
+            onValueChange={handleSearch}
+          />
+        </InlineContainer>
+        <ProductListComponent products={products} />
       </ProductListWrapper>
     </ListWrapper>
   );

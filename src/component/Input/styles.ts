@@ -17,4 +17,5 @@ export const InputWrapper = styled.div`
   align-items: flex-start;
   gap: 5px;
   flex-direction: column;
+  width: calc(100% - 2px);
 `;
