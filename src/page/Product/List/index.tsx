@@ -6,29 +6,27 @@ import { Spacing } from "../../../component/Spacing";
 import { MainTitle, Title } from "../../../component/Typograph";
 import { Product } from "../Edit";
 import { ListWrapper, ProductListWrapper } from "./styles";
+import { productService } from "../../../service";
 
 export const ProductList = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [search, setSearch] = useState<string>("");
 
-  const handleSearch = (search: string) => {
-    if (!search)
-      return setProducts([
-        { name: "teste", description: "descrição", value: 2 },
-        { name: "search", description: "211", value: 3 },
-      ]);
-    return setProducts(
-      products.filter(
-        ({ name, description }) =>
-          name.includes(search) || description.includes(search)
-      )
+  const getProducts = async () => {
+    const res = await productService.getAll();
+    setProducts(res?.data);
+  };
+
+  const handleSearch = (): Product[] => {
+    if (!search || search === "") return products;
+    return products.filter(
+      ({ name, description }) =>
+        name.includes(search) || description.includes(search)
     );
   };
 
   useEffect(() => {
-    setProducts([
-      { name: "teste", description: "descrição", value: 2 },
-      { name: "search", description: "211", value: 3 },
-    ]);
+    getProducts();
   }, []);
 
   return (
@@ -42,10 +40,10 @@ export const ProductList = () => {
           <Input
             placeholder="Digite para buscar"
             label="Buscar"
-            onValueChange={handleSearch}
+            onValueChange={setSearch}
           />
         </InlineContainer>
-        <ProductListComponent products={products} />
+        <ProductListComponent products={handleSearch()} />
       </ProductListWrapper>
     </ListWrapper>
   );

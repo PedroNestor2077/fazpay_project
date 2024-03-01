@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Product } from "../../page/Product/Edit";
 import { formatToBRLCurrency } from "../../service/utils/formatCurrency";
 import {
@@ -24,12 +25,14 @@ export const ProductList = ({ products }: Props) => {
         </StyledTableRow>
       </StyledTableHead>
       <StyledTableBody>
-        {products?.map(({ name, description, value }) => (
+        {products?.map(({ name, description, value, id }) => (
           <StyledTableRow>
             <StyledTableData>{name}</StyledTableData>
             <StyledTableData>{description}</StyledTableData>
             <StyledTableData>{formatToBRLCurrency(value)}</StyledTableData>
-            <StyledTableData>Editar</StyledTableData>
+            <StyledTableData>
+              <Link to={`/product/edit/${id}`}>Editar</Link>
+            </StyledTableData>
           </StyledTableRow>
         ))}
       </StyledTableBody>

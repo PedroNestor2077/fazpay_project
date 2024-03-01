@@ -4,18 +4,19 @@ import { Input } from "../../component/Input";
 import { Spacing } from "../../component/Spacing";
 import { Title } from "../../component/Typograph";
 import { FormWrapper, SignUpWrapper } from "./styles";
+import { profileService } from "../../service";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export const SignUp = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [Name, setName] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const navigator = useNavigate();
 
-  const emailIsValid = useCallback(() => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  }, [email]);
-
-  const handleSignUp = () => {};
+  const handleSignUp = async () => {
+    await profileService.create({ email, password, name });
+    navigator("/");
+  };
 
   return (
     <SignUpWrapper>
@@ -38,7 +39,6 @@ export const SignUp = () => {
           name="email"
           type="email"
           onValueChange={setEmail}
-          error={(!emailIsValid() && "E-mail inválido.") || undefined}
         />
 
         <Spacing top={24} />

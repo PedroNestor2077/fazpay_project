@@ -2,17 +2,27 @@ import { useCallback, useState } from "react";
 import { Button } from "../../component/Button";
 import { Input } from "../../component/Input";
 import { Spacing } from "../../component/Spacing";
-import { Title } from "../../component/Typograph";
+import { Paragraph, Title } from "../../component/Typograph";
 import { FormWrapper, LoginWrapper } from "./styles";
+import { Link, useNavigate } from "react-router-dom";
+import { profileService } from "../../service";
 
 export const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const navigator = useNavigate();
+  const handleLogin = async () => {
+    const profile = await profileService.getByEmail(email);
+    // 100% Seguro
+    if (
+      profile?.data[0]?.email === email &&
+      profile?.data[0]?.password === password
+    )
+      navigator("/products");
 
-  const emailIsValid = useCallback(() => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  }, [email]);
+    setEmail("");
+    setPassword("");
+  };
 
   return (
     <LoginWrapper>
@@ -20,17 +30,18 @@ export const Login = () => {
       <Spacing bottom={24} />
       <FormWrapper>
         <Input
+          value={email}
           placeholder="Digite o e-mail"
           label="E-mail"
           name="email"
           type="email"
           onValueChange={setEmail}
-          error={(!emailIsValid() && "E-mail inválido.") || undefined}
         />
 
         <Spacing top={24} />
 
         <Input
+          value={password}
           placeholder="Digite a senha"
           label="Senha"
           name="password"
@@ -40,7 +51,13 @@ export const Login = () => {
 
         <Spacing top={24} />
 
-        <Button disabled={!password || !email}>Entrar</Button>
+        <Button disabled={!password || !email} onClick={handleLogin}>
+          Entrar
+        </Button>
+        <Spacing top={24} />
+        <Paragraph>
+          Não possui uma conta? <Link to={"/singup"}>Cadastrar</Link>
+        </Paragraph>
       </FormWrapper>
     </LoginWrapper>
   );
