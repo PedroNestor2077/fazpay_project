@@ -1,7 +1,6 @@
 {
-  "name": "star_wars_app_front",
+  "name": "faz_pay_app",
   "version": "1.0.0",
-  "homepage": "https://star-wars-app-front.vercel.app",
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
@@ -16,6 +15,7 @@
     "jest-styled-components": "^7.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-jsx": "^1.0.0",
     "react-scripts": "5.0.1",
     "styled-components": "^6.1.8",
     "typescript": "^5.3.3",
